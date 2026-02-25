@@ -1,0 +1,16 @@
+def bubble_sort(arr):
+    n = len(arr)
+    
+    # Проходим по массиву n-1 раз
+    for i in range(n - 1):
+        swapped = False  # Флаг отслеживания обменов
+        
+        for j in range(n - 1 - i):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+                swapped = True  # Если текущий элемент больше следующего - меняем местами
+    
+        if not swapped:  # Если за проход не было обменов - массив уже отсортирован
+            break
+    
+    return arr
