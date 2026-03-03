@@ -1,0 +1,28 @@
+import random  # модуль для случайного выбора pivot
+
+def partition(a, l, r):
+    x = a[r]  # опорный элемент
+    i = l - 1  
+    for j in range(l, r): 
+        if a[j] <= x:  # если элемент <= pivot
+            i += 1  # сдвигаем границу
+            a[i], a[j] = a[j], a[i]  # меняем элементы
+    a[i + 1], a[r] = a[r], a[i + 1]  
+    return i + 1  # возвращаем индекс pivot
+
+def quick_select(a, k):
+    l, r = 0, len(a) - 1  
+    while l <= r:  
+        p = random.randint(l, r)  # случайный pivot
+        a[p], a[r] = a[r], a[p]  # перенос pivot в конец
+        q = partition(a, l, r)  # разбиение
+        if q == k: return a[q]  
+        if q > k: r = q - 1  # ищем в левой части
+        else: l = q + 1  # ищем в правой части
+
+
+arr = [7,2,9,4,1,8,3,6,5]  
+k = 3  # ищем 4-й наименьший элемент
+print("Массив:", arr)  
+print("k-й элемент:", quick_select(arr, k))
+
