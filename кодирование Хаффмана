@@ -1,0 +1,53 @@
+import heapq  
+
+class HuffmanNode:
+    def __init__(self, symbol, frequency):
+        self.symbol = symbol  # символ
+        self.frequency = frequency  # частота символа
+        self.left_child = None  # левый потомок
+        self.right_child = None  # правый 
+
+    def __lt__(self, other):
+        return self.frequency < other.frequency  # сравнение по частоте
+
+
+def create_huffman_tree(input_text):
+    frequency_map = {}  # словарь частот 
+    for symbol in input_text:
+        frequency_map[symbol] = frequency_map.get(symbol, 0) + 1  # подсчёт частот
+
+    priority_queue = []  
+    for symbol, freq in frequency_map.items():
+        heapq.heappush(priority_queue, HuffmanNode(symbol, freq))  # добавление узлов
+
+    while len(priority_queue) > 1: 
+        first = heapq.heappop(priority_queue)  # извлекаем мин
+        second = heapq.heappop(priority_queue)  # извлекаем следующий
+
+        combined = HuffmanNode(None, first.frequency + second.frequency)  # объединённый узел
+        combined.left_child = first  # левый потомок
+        combined.right_child = second  # правый 
+
+        heapq.heappush(priority_queue, combined)  
+
+    return priority_queue[0]  # корень дерева
+
+def generate_codes(tree_node, current_code="", codes=None):
+    if codes is None:
+        codes = {}  # словарь кодов
+
+    if tree_node is not None:
+        if tree_node.symbol is not None:
+            codes[tree_node.symbol] = current_code  # сохраняем код
+
+        generate_codes(tree_node.left_child, current_code + "0", codes)  # влево
+        generate_codes(tree_node.right_child, current_code + "1", codes)  # вправо
+
+    return codes
+
+
+def encode_huffman(input_text):
+    tree_root = create_huffman_tree(input_text)  
+    code_table = generate_codes(tree_root)  # получаем коды
+    encoded_result = ''.join(code_table[symbol] for symbol in input_text)  # кодирование
+    return encoded_result, tree_root  # результат и дерево
