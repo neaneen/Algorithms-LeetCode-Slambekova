@@ -1,0 +1,15 @@
+def decode_huffman(encoded_string, tree_root):
+    decoded_symbols = []  # список символов результата
+    node_pointer = tree_root  # указатель на текущий узел
+
+    for bit_value in encoded_string: 
+        if bit_value == '0':
+            node_pointer = node_pointer.left_child  # влево
+        else:
+            node_pointer = node_pointer.right_child  # вправо
+
+        if node_pointer.symbol is not None:  # если лист
+            decoded_symbols.append(node_pointer.symbol)  # добавляем символ
+            node_pointer = tree_root  # возвращаемся к корню
+
+    return ''.join(decoded_symbols) 
